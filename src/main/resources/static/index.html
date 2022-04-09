@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>Demo</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width"/>
+    <base href="/"/>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+</head>
+<body>
+<div class="container unauthenticated">
+    With Google: <a href="/oauth2/authorization/google">click here</a>
+</div>
+<div class="container authenticated" style="display:none">
+    Logged in as: <span id="user"></span>
+</div>
+
+<div class="container authenticated" style="display:none">
+    Logged in as: <span id="posts"></span>
+</div>
+<script type="text/javascript">
+$.get("/user", function(data) {
+    $("#user").html(data.name);
+    $(".unauthenticated").hide()
+    $(".authenticated").show()
+});
+
+$.post("/post", {title : "hi", content : "hello there"});
+
+$.post("/comment", {postId : 18, content : "hello there"});
+
+$.get("/getposts", function(data) {
+    $("#posts").html(data);
+});
+</script>
+</body>
+</html>
