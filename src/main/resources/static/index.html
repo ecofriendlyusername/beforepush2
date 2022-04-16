@@ -20,6 +20,14 @@
 <div class="container authenticated" style="display:none">
     Logged in as: <span id="posts"></span>
 </div>
+
+<div class="container authenticated">
+    Logged in as: <span id="lgout"></span>
+    <div>
+        <button onClick="logout()" class="btn btn-primary">Logout</button>
+    </div>
+</div>
+<!--Test-->
 <script type="text/javascript">
 $.get("/user", function(data) {
     $("#user").html(data.name);
@@ -27,13 +35,19 @@ $.get("/user", function(data) {
     $(".authenticated").show()
 });
 
-$.post("/post", {title : "hi", content : "hello there"});
+$.post("/post", {title : "hi", content : "a new post"});
+$.post("/comment", {postId : 60, content : "a new comment on a new post"});
+$.post("/deletecomment", {commentId : 72});
 
-$.post("/comment", {postId : 18, content : "hello there"});
+const logout = function () {
+    $.post("/logout", function () {
+        $("#lgout").html('');
+        $(".unauthenticated").show();
+        $(".authenticated").hide();
+    })
+    return true;
+};
 
-$.get("/getposts", function(data) {
-    $("#posts").html(data);
-});
 </script>
 </body>
 </html>

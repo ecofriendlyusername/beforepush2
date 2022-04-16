@@ -27,8 +27,12 @@ import com.example.demo.services.PostService;
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
-	@Autowired
 	AccountService accService;
+
+	@Autowired
+	public WebSecurityConfig(AccountService accService) {
+		this.accService = accService;
+	}
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
     	// @formatter:off
@@ -36,7 +40,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
             .authorizeRequests(a -> a
                 .antMatchers("/", "/error", "/webjars/**").permitAll()
                 .anyRequest().authenticated()
-            ) 
+            ) .logout(l -> l
+						.logoutSuccessUrl("/").permitAll()
+				)
             .exceptionHandling(e -> e
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
             )
@@ -45,7 +51,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
         // @formatter:on
     }
 
-	// pb
 	private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
 		final OidcUserService delegate = new OidcUserService();
 	    return (userRequest) -> {
@@ -54,7 +59,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
 	        if (!accService.existsBySub(user.getAttribute("sub"))) {
 	        	accService.register(user.getAttribute("sub").toString(), user.getAttribute("email"));
 	        }
-	        
 	        return user;
 	    };
 	}

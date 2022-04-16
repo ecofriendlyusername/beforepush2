@@ -10,34 +10,63 @@ import com.example.demo.PostRepository;
 import com.example.demo.model.Account;
 import com.example.demo.model.Post;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
 public class PostService {
-	
-	@Autowired
 	PostRepository postRepo;
-	@Autowired
 	AccountRepository accRepo;
+	CommentRepository comRepo;
 
 	@Autowired
-	CommentRepository comRepo;
+	public PostService(PostRepository postRepo, AccountRepository accRepo, CommentRepository comRepo) {
+		this.postRepo = postRepo;
+		this.accRepo = accRepo;
+		this.comRepo = comRepo;
+	}
 
 	public void post(String sub, String title, String content) {
 		// TODO Auto-generated method stub
-		Account acc = accRepo.getBySub(sub);
-		Post newPost = new Post();
-		newPost.setTitle(title);
-		newPost.setContent(content);
-		acc.addPost(newPost);
-		accRepo.save(acc);
+		try {
+			Account acc = accRepo.getBySub(sub);
+			Post newPost = new Post(title, content);
+			acc.addPost(newPost);
+			accRepo.save(acc);
+		} catch (IllegalArgumentException illegalArgumentException) {
+
+		} catch (EntityNotFoundException entityNotFoundException) {
+
+		}
 	}
 
+	public String delete(String sub, int id) {
+		try {
+			//
+			postRepo.deleteById(id);
+		} catch (EntityNotFoundException entityNotFoundException) {
 
+		}
+		return null;
+	}
 
-    public List<Post> getposts(String sub) {
-		Account acc = accRepo.getBySub(sub);
-		List<Post> posts = postRepo.getByAccount(acc);
-		return posts;
+	public Post getPost(int id) {
+		try {
+			return postRepo.getById(id);
+		} catch (EntityNotFoundException entityNotFoundException) {
+
+		}
+		return null;
+	}
+
+    public List<Post> getPosts(String sub) {
+		try {
+			Account acc = accRepo.getBySub(sub);
+			return postRepo.getByAccount(acc);
+		} catch (EntityNotFoundException entityNotFoundException) {
+
+		}
+		return null;
     }
 }
+

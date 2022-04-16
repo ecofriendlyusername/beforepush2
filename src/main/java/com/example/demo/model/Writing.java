@@ -37,6 +37,6 @@ public class Writing {
 	private Integer id;
 	private String content;
 	//(Optional) Whether the association is optional. If set to false then a non-null relationship must always exist.
-	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Account account;
 }

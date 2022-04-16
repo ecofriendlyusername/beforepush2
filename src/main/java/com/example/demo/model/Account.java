@@ -1,16 +1,14 @@
 package com.example.demo.model;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.transaction.Transactional;
 
 import org.hibernate.LazyInitializationException;
@@ -28,7 +26,9 @@ public class Account {
 	private String email;
 	private String sub;
 
-	@OneToMany(mappedBy="account", cascade = CascadeType.ALL)
+	// @OneToMany(mappedBy="account", cascade = CascadeType.ALL
+	@Cascade(CascadeType.SAVE_UPDATE)
+	@OneToMany(mappedBy = "account")
 	private List<Post> posts;
 	@OneToMany(mappedBy="account")
 	private List<Comment> comments;
@@ -45,5 +45,9 @@ public class Account {
 		if (comments == null) comments = new ArrayList<Comment>();
 		c1.setAccount(this);
 		this.comments.add(c1);
+	}
+
+	public void update() {
+
 	}
 }

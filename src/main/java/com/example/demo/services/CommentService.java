@@ -9,25 +9,52 @@ import com.example.demo.model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
+
 @Service
 public class CommentService {
-    @Autowired
     PostRepository postRepo;
-    @Autowired
     AccountRepository accRepo;
+    CommentRepository comRepo;
 
     @Autowired
-    CommentRepository comRepo;
-    public void post(String sub, int postId, String content) {
+    public CommentService(PostRepository postRepo, AccountRepository accRepo, CommentRepository comRepo) {
+        this.postRepo = postRepo;
+        this.accRepo = accRepo;
+        this.comRepo = comRepo;
+    }
+
+    public void post(String sub, int id, String content) {
         // TODO Auto-generated method stub
         Account acc = accRepo.getBySub(sub);
-        Post post = postRepo.getById(postId);
+        Post post = postRepo.getById(id);
         Comment newComment = new Comment();
         newComment.setContent(content);
         acc.addComment(newComment);
         post.addComment(newComment);
-        comRepo.save(newComment);
-        postRepo.save(post);
         accRepo.save(acc);
+    }
+
+    public void deleteComment(String sub, int id) {
+        try {
+            if (comRepo.getById(id).getAccount() != accRepo.getBySub(sub)) return;
+            comRepo.deleteById(id);
+        } catch (IllegalArgumentException illegalArgumentException) {
+
+        } catch (EntityNotFoundException entityNotFoundException) {
+
+        }
+    }
+
+    public List<Comment> getComments(String sub) {
+        try  {
+            return comRepo.getByAccount(accRepo.getBySub(sub));
+        } catch (IllegalArgumentException illegalArgumentException) {
+
+        } catch (EntityNotFoundException entityNotFoundException) {
+
+        }
+        return null;
     }
 }
