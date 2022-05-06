@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -23,13 +24,19 @@ public class Account {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String userid;
+	@JsonIgnore
 	private String email;
+	@JsonIgnore
 	private String sub;
 
 	// @OneToMany(mappedBy="account", cascade = CascadeType.ALL
+	@JsonIgnore
 	@Cascade(CascadeType.SAVE_UPDATE)
 	@OneToMany(mappedBy = "account")
 	private List<Post> posts;
+
+	@JsonIgnore
+	@Cascade(CascadeType.SAVE_UPDATE)
 	@OneToMany(mappedBy="account")
 	private List<Comment> comments;
 

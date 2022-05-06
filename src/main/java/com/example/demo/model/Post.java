@@ -23,6 +23,7 @@ public class Post extends Writing {
 	@Cascade(CascadeType.ALL)
 	@OneToMany(mappedBy="post")
 	private List<Comment> comments;
+    private String stocks;
 
 	public Post() {
 

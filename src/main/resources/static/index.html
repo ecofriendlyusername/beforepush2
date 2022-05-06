@@ -35,9 +35,35 @@ $.get("/user", function(data) {
     $(".authenticated").show()
 });
 
-$.post("/post", {title : "hi", content : "a new post"});
-$.post("/comment", {postId : 60, content : "a new comment on a new post"});
-$.post("/deletecomment", {commentId : 72});
+// $.post("/post", {title : "hi", content : "first post with tickers", tickers : "AAPL,KO"});
+// $.post("/comment", {postId : 60, content : "a new comment on a new post"});
+// $.post("/deletecomment", {commentId : 72});
+
+let newArr = [];
+let obj = {};
+obj.name = "some name";
+obj.company = "apple";
+newArr.push(obj);
+let obj2 = {};
+obj2.name = "some name 2";
+obj2.company = "meta";
+newArr.push(obj2);
+
+
+$.ajax({
+    contentType: 'application/json',
+    data: JSON.stringify(newArr),
+    dataType: 'json',
+    processData: false,
+    type: 'POST',
+    url: '/testsomething'
+});
+fetch("/testsomething",{method : "POST",body:JSON.stringify(newArr),
+    headers :{"content-Type" : "application/json"}
+})
+
+$.post("/getpostspage", {page : 0, size : 3, sort : "id,desc"});
+
 
 const logout = function () {
     $.post("/logout", function () {

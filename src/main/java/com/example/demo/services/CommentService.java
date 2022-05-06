@@ -33,7 +33,7 @@ public class CommentService {
         newComment.setContent(content);
         acc.addComment(newComment);
         post.addComment(newComment);
-        accRepo.save(acc);
+        comRepo.save(newComment);
     }
 
     public void deleteComment(String sub, int id) {

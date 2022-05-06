@@ -6,3 +6,6 @@ spring:
           google:
             clientId: 718319706926-24d7cs04mokttfd3tpjseo1pb3rfg15b.apps.googleusercontent.com
             clientSecret: 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
+  iex:
+    token:
+      public: Tpk_2287cf41d8b04ce1b3d6decded49158a
